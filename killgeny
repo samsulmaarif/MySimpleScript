@@ -1,0 +1,18 @@
+#!/bin/bash
+
+PIDVBOX=/tmp/vboxpid.txt
+
+if [ -e $PIDVBOC ]; then
+	sudo rm -rf $PIDVBOX
+	echo "Removing $PIDVBOX file"
+	ps ax | grep VirtualBox > $PIDVBOX
+	echo "Getting All VirtualBox process ID"
+	sleep 3
+	echo "Killing all Virtualbox process...."
+	echo "Please wait, this can take a few secons to finish...."
+	sudo kill -9 $(awk '{print $1}' $PIDVBOX | cut -d, -f 1)
+	sleep 3
+	echo "Done!"
+fi
+
+

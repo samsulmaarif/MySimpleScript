@@ -1,0 +1,72 @@
+#!/bin/bash
+
+ISOPATH=/home/samsul/Downloads/ISO/w/OpenDisc.12.09.iso
+TMPMOUNT=/tmp/opendisc
+
+usage="Usage $0 [OPTION] [FILE]
+By default, if option not given it will
+mount $ISOPATH to $TMPMOUNT
+and share it via samba, in windows you can accesit with \\\studio\opendisc\\ 
+and in Linux with smb://studio/opendisc/
+
+Mandatory arguments to long options are mandatory for short options too.
+
+  -i, --isofile		the iso file that will be mounted
+  -h, --help		show this help, in case you want it! :P
+  -v, --version		show version
+
+  This is for personal use only. :-)
+
+"
+
+version="sharedisk (C) 2013
+Written by Samsul Ma'arif 
+
+For personal use only. :-)
+"
+
+mount_()
+{
+	if [ -d $TMPMOUNT ]; then
+		sudo mount -o loop $ISOPATH $TMPMOUNT
+		echo "mounting $ISOPATH to $TMPMOUNT"
+	fi
+}
+
+restart_smbd()
+{
+	sudo service smbd restart
+	echo "restarting smbd service"
+}
+
+create_tmp_dir()
+{
+	if [ ! -e $TMPMOUNT ]; then
+		mkdir $TMPMOUNT
+		echo "Creating directory $TMPMOUNT"
+	fi
+}
+
+case $1 in
+	--isofile|-i)
+		create_tmp_dir
+		sudo mount -o loop $(pwd)/$2 $TMPMOUNT
+		echo "mounting $(pwd)/$2 to $TMPMOUNT"
+		restart_smbd
+		;;
+	--help|-h)
+		echo "$usage"
+		;;
+	--version|-v)
+		echo "$version"
+		;;
+	--curdir) 
+		echo $(pwd)
+		pwd
+		;;
+	*)
+		create_tmp_dir
+		mount_
+		restart_smbd
+		;;
+esac

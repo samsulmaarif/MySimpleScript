@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SMARTPID=/tmp/smartid.txt
+
+if [ -e $SMARTPID ]; then
+	sudo rm -rf $SMARTPID
+	echo "Removing $SMARTPID file"
+	ps ax | grep Smart > $SMARTPID
+	#pidof HWActivator > $SMARTPID
+	echo "Getting All Smart --Useless--  process ID"
+	sleep 3
+	echo "Killing all Smart --Useless--  process...."
+	echo "Please wait, this can take a few secons to finish...."
+	sudo kill -9 $(awk '{print $1}' $SMARTPID | cut -d, -f 1)
+	#sudo kill -9 $(echo $SMARTPID)
+	sleep 3
+	echo "Done!"
+fi
+
+
