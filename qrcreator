@@ -1,0 +1,38 @@
+#!/bin/bash
+# i found this script in : http://ubuntuforums.org/showthread.php?t=1340808
+# and add a little modification for my own purpose
+# credit to : firehelix
+
+
+me=`whoami`
+outpath=`zenity --entry --title="Save path?" --text="What folder would you like to save the QR image to?  Default of /home/$me/Pictures/Gambar/qrcode will be used if one is not entered."`
+button0=$?
+if [ $button0 -eq 0 ];then
+	if [ -z $outpath ];then
+	outpath=/home/`whoami`/Pictures/Gambar/qrcode
+	fi
+pname=`zenity --entry --title="What filename?" --text="What name should be used for the output?  ex: filename > filename.png"`
+button1=$?
+	if [ $button1 -eq 0 ];then
+		if [ -z $pname ];then
+		zenity --info --title="Failure" --text="You failed to enter a filename. Exiting."
+		else
+		content=`zenity --entry --title="Content --" --text="What do you want your QR code to say?"`
+		button2=$?
+			if [ $button2 -eq 0 ];then
+				if [ -z $content ];then
+				zenity --info --title="Failure" --text="You failed to enter any content. Exiting."
+				else
+				qrencode -s 300 -o "$outpath"/"$pname".png "$content"
+				zenity --info --title="Finished --" --text="Your QR code is located at : $outpath/$pname.png"
+				fi
+			else
+			zenity --info --title="Canceled" --text="QR code generation canceled - content"
+			fi
+		fi	
+	else
+	zenity --info --title="Canceled" --text="QR code generation canceled - filename"
+	fi
+else
+zenity --info --title="Canceled" --text="QR code generation canceled - file path"
+fi
