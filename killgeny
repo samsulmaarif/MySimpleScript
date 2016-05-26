@@ -2,7 +2,7 @@
 
 PIDVBOX=/tmp/vboxpid.txt
 
-if [ -e $PIDVBOC ]; then
+if [ -e $PIDVBOX ]; then
 	sudo rm -rf $PIDVBOX
 	echo "Removing $PIDVBOX file"
 	ps ax | grep VirtualBox > $PIDVBOX

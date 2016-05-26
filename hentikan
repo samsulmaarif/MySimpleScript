@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Skrip ini digunakan untuk menghentikan berbagai proses yang tidak
+# diperlukan saat melakukan pekerjaan kantoran. Aplikasi yang dihentikan
+# oleh skrip ini sebagian besar adalah aplikasi untuk server.
+
+# Sabtu, 21 November 2015 (saat skrip ini didokumentasikan) sebenarnya 
+# telah beberapa kali mengalami perubahan, termasuk penambahan notifikasi
+# dengan notify-send yang awalnya menggunakan zenity.
+
+KIYE=`basename $0`
+INYONG=`whoami`
+
+case "${KIYE}" in
+	hentikan-semua)
+		for x in {apache2,mysql,ntp,postfix,dovecot,proftpd,smbd,nmbd,samba,bind9,mailman,clamav-daemon,clamav-freshclam,webmin,vboxdrv,vboxweb-service,usermin}; do
+			sudo service $x stop
+			notify-send --urgency=low -t 600 --icon=/usr/share/icons/gnome/48x48/actions/process-stop.png "$x sudah berhenti" "Berjalan dengan lancar..."
+			espeak "$x has been stopped"
+		done
+		;;
+	hentikan-saja)
+		for x in {apache2,mysql,ntp,postfix,dovecot,proftpd,smbd,nmbd,samba,bind9,mailman,clamav-daemon,clamav-freshclam}; do
+			sudo service $x stop
+			notify-send --urgency=low -t 600 --icon=/usr/share/icons/gnome/48x48/actions/process-stop.png "$x sudah berhenti" "Berjalan dengan lancar..."
+			espeak "$x has been stopped"
+		done
+		;;
+	hentikan)
+		for x in {apache2,mysql,proftpd,bind9,webmin,usermin}; do
+			sudo service $x stop
+			notify-send --urgency=low -t 600 --icon=/usr/share/icons/gnome/48x48/actions/process-stop.png "$x sudah berhenti" "Berjalan dengan lancar..."
+			espeak "$x has been stopped"
+		done
+		;;
+	jalankan-semua)
+		for x in {apache2,mysql,ntp,postfix,dovecot,proftpd,smbd,nmbd,samba,bind9,mailman,clamav-daemon,clamav-freshclam,webmin,vboxdrv,vboxweb-service,usermin}; do
+			sudo service $x start
+			notify-send --urgency=low -t 600 --icon=/usr/share/icons/gnome/48x48/categories/system-help.png "$x telah dijalankan" "demikian......"
+			espeak "$x has been started"
+		done
+		;;
+	jalankan)
+		for x in {apache2,mysql,proftpd,bind9,webmin,usermin}; do
+			sudo service $x start 
+			notify-send --urgency=low -t 600 --icon=/usr/share/icons/gnome/48x48/categories/system-help.png "$x telah dijalankan" "demikian......"
+			espeak "$x has been started"
+		done
+		;;
+	*)
+		echo "Perintahnya salah ya...!"
+		;;
+esac
+
+espeak "All done! Enjoy your self $INYONG"
