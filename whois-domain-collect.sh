@@ -27,23 +27,24 @@ for t in $(cat $LISTD);
 		TEST1=`grep "DOMAIN NOT FOUND" $HASIL/$t.txt`
 		if [ -n "$TEST1" ]; then
 			echo "$t,DOMAIN NOT FOUND,," >> $AKHIR
+		else
+			cat $HASIL/$t.txt | awk -F: '/^Domain Name/{line=$2","}\
+			/^Created On/{line=line""$2":"$3":"$4}\
+			/^Last Updated On/{line=line","$2":"$3":"$4}\
+			/^Expiration Date/{line=line","$2":"$3":"$4}\
+			/^Registrant Name/{line=line","$2}\
+			/^Registrant Street1/{line=line","$2}\
+			/^Registrant Street2/{line=line","$2}\
+			/^Registrant Street3/{line=line","$2}\
+			/^Registrant City/{line=line","$2}\
+			/^Registrant State\/Province/{line=line","$2}\
+			/^Registrant Postal Code/{line=line","$2}\
+			/^Registrant Phone/{line=line","$2}\
+			/^Registrant Email/{line=line","$2}\
+			/^Name Server:NS/{print line","$2;}' | awk '!seen[$1]++' >> $AKHIR
+			echo "Proses selesai, tidak menghapus $HASIL/$t.txt"
+			#rm -rfv $HASIL/$t.txt;
 		fi
-		cat $HASIL/$t.txt | awk -F: '/^Domain Name/{line=$2","}\
-		/^Created On/{line=line""$2":"$3":"$4}\
-		/^Last Updated On/{line=line","$2":"$3":"$4}\
-		/^Expiration Date/{line=line","$2":"$3":"$4}\
-		/^Registrant Name/{line=line","$2}\
-		/^Registrant Street1/{line=line","$2}\
-		/^Registrant Street2/{line=line","$2}\
-		/^Registrant Street3/{line=line","$2}\
-		/^Registrant City/{line=line","$2}\
-		/^Registrant State\/Province/{line=line","$2}\
-		/^Registrant Postal Code/{line=line","$2}\
-		/^Registrant Phone/{line=line","$2}\
-		/^Registrant Email/{line=line","$2}\
-		/^Name Server:NS/{print line","$2;}' | awk '!seen[$1]++' >> $AKHIR
-		echo "Proses selesai, tidak menghapus $HASIL/$t.txt"
-		#rm -rfv $HASIL/$t.txt;
 done
 
 uniq --check-chars=10 $AKHIR > $AKHIR2
