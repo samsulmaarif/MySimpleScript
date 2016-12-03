@@ -1,7 +1,8 @@
 #!/bin/bash
-LISTD=./whois-test/daftar-domain
+LISTD=./whois-test/domain-not-found-lower
 HASIL=./whois-test
-AKHIR=./whois-test/hasil.csv
+AKHIR=./whois-test/hasil-not-found.csv
+AKHIR2=./whois-test/hasil-not-found2.csv
 
 for r in $(cat $LISTD);
 	do 
@@ -23,6 +24,10 @@ fi
 for t in $(cat $LISTD); 
 	do 
 		echo "Memroses berkas $HASIL/$t.txt"
+		TEST1=`grep "DOMAIN NOT FOUND" $HASIL/$t.txt`
+		if [ -n "$TEST1" ]; then
+			echo "$t,DOMAIN NOT FOUND,," >> $AKHIR
+		fi
 		cat $HASIL/$t.txt | awk -F: '/^Domain Name/{line=$2","}\
 		/^Created On/{line=line""$2":"$3":"$4}\
 		/^Last Updated On/{line=line","$2":"$3":"$4}\
@@ -40,3 +45,5 @@ for t in $(cat $LISTD);
 		echo "Proses selesai, tidak menghapus $HASIL/$t.txt"
 		#rm -rfv $HASIL/$t.txt;
 done
+
+uniq --check-chars=10 $AKHIR > $AKHIR2
