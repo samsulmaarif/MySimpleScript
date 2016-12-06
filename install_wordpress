@@ -1,4 +1,11 @@
 #!/bin/bash
+# -------------------------------------------------------------------------
+# WordPress Script Installer 
+# Copyright (c) 2016 Samsul Ma'arif
+# This script is licensed under GNU GPL version 2.0 or above
+# 
+#                 http://www.samsul.web.id
+# -------------------------------------------------------------------------
 
 set -e
 
@@ -7,7 +14,7 @@ PWD=`pwd`
 FILENAME=wordpress-latest.tar.gz
 
 
-echo "> Memasuki directori $PWD"
+echo "> Memasuki direktori $PWD"
 cd $PWD
 echo "> Mengunduh $FILENAME dengan wget"
 wget -c --no-check-certificate -t 0 $WP -O $FILENAME
@@ -24,15 +31,20 @@ fi
 echo "> Disarankan menghapus berkas $FILENAME untuk menghemat"
 echo "> ruang disk. :-D "
 echo ""
-echo "> Apakah hendak menghapus berkas $FILENAME? [Y/t]"
+echo -n "> Apakah hendak menghapus berkas $FILENAME? [Y/t] "
 read hapus_berkas
-if [ "${hapus_berkas}" == "y" -o "${hapus_berkas}" == "Y" ]; then
-        echo "> Menghapus berkas $FILENAME sesuai permintaan!"
-        rm -rfv $FILENAME
-		echo "> Menghapus direktori wordpress ...!"
-	#if [ -d wordpress ]; then
+if [ "${hapus_berkas}" == "y" -o "${hapus_berkas}" == "Y" -o "${hapus_berkas}" == "" ]; then
+    echo "> Menghapus berkas $FILENAME sesuai permintaan!"
+    rm -rfv $FILENAME
+	echo "> Menghapus direktori wordpress ...!"
+	if [ -d wordpress ]; then
 		rm -rfv wordpress
-	#fi
+	fi
 elif [ "${hapus_berkas}" == "t" -o "${hapus_berkas}" =="T" ]; then
 	exit 1
+else
+	exit 1
 fi
+
+# tambahkan skrip di atas kode ini
+exit 0
