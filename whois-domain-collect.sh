@@ -1,8 +1,8 @@
 #!/bin/bash
-LISTD=./whois-test/domain-not-found-lower
+LISTD=./whois-test/list-ukm4
 HASIL=./whois-test
-AKHIR=./whois-test/hasil-not-found.csv
-AKHIR2=./whois-test/hasil-not-found2.csv
+AKHIR=./whois-test/hasil-ukm4-0.csv
+AKHIR2=./whois-test/hasil-ukm4-1.csv
 
 for r in $(cat $LISTD);
 	do 
@@ -29,18 +29,18 @@ for t in $(cat $LISTD);
 			echo "$t,DOMAIN NOT FOUND,," >> $AKHIR
 		else
 			cat $HASIL/$t.txt | awk -F: '/^Domain Name/{line=$2","}\
-			/^Created On/{line=line""$2":"$3":"$4}\
-			/^Last Updated On/{line=line","$2":"$3":"$4}\
-			/^Expiration Date/{line=line","$2":"$3":"$4}\
-			/^Registrant Name/{line=line","$2}\
-			/^Registrant Street1/{line=line","$2}\
-			/^Registrant Street2/{line=line","$2}\
-			/^Registrant Street3/{line=line","$2}\
-			/^Registrant City/{line=line","$2}\
-			/^Registrant State\/Province/{line=line","$2}\
-			/^Registrant Postal Code/{line=line","$2}\
-			/^Registrant Phone/{line=line","$2}\
-			/^Registrant Email/{line=line","$2}\
+			#/^Created On/{line=line""$2":"$3":"$4}\
+			#/^Last Updated On/{line=line","$2":"$3":"$4}\
+			#/^Expiration Date/{line=line","$2":"$3":"$4}\
+			#/^Registrant Name/{line=line","$2}\
+			#/^Registrant Street1/{line=line","$2}\
+			#/^Registrant Street2/{line=line","$2}\
+			#/^Registrant Street3/{line=line","$2}\
+			#/^Registrant City/{line=line","$2}\
+			#/^Registrant State\/Province/{line=line","$2}\
+			#/^Registrant Postal Code/{line=line","$2}\
+			#/^Registrant Phone/{line=line","$2}\
+			#/^Registrant Email/{line=line","$2}\
 			/^Name Server:NS/{print line","$2;}' | awk '!seen[$1]++' >> $AKHIR
 			echo "Proses selesai, tidak menghapus $HASIL/$t.txt"
 			#rm -rfv $HASIL/$t.txt;
