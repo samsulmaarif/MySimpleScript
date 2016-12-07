@@ -15,41 +15,50 @@
 #                 http://www.samsul.web.id
 # -------------------------------------------------------------------------
 
-set -e
+#set -e
 
-WP=https://id.wordpress.org/wordpress-4.6.1-id_ID.tar.gz
+WP=https://id.wordpress.org/wordpress-4.7-id_ID.tar.gz
 PWD=`pwd`
 FILENAME=wordpress-latest.tar.gz
 
-
-echo "> Memasuki direktori $PWD"
-cd $PWD
-echo "> Mengunduh $FILENAME dengan wget"
-wget -c --no-check-certificate -t 0 $WP -O $FILENAME
-echo "> Mengekstrak $FILENAME"
-if [ -e $FILENAME ]; then
-	tar -xvzf $FILENAME
-fi
-
-echo "> Memindahkan berkas ke direktori saat ini ...."
-if [ -d wordpress ]; then
-	mv -vf wordpress/* .
-fi
-
-echo "> Disarankan menghapus berkas $FILENAME untuk menghemat"
-echo "> ruang disk. :-D "
-echo ""
-echo -n "> Apakah hendak menghapus berkas $FILENAME? [Y/t] "
-read hapus_berkas
-if [ "${hapus_berkas}" == "y" -o "${hapus_berkas}" == "Y" -o "${hapus_berkas}" == "" ]; then
-    echo "> Menghapus berkas $FILENAME sesuai permintaan!"
-    rm -rfv $FILENAME
-	echo "> Menghapus direktori wordpress ...!"
-	if [ -d wordpress ]; then
-		rm -rfv wordpress
+echo "> ------------------------PERINGATAN!!!---------------------------"
+echo "> Skrip ini akan menghapus seluruh konten di direktori saat ini"
+echo "> kemudian mengunduh dan menginstall wordpress di $PWD."
+echo "> ------------------------PERINGATAN!!!---------------------------"
+echo -n "> Anda yakin akan melakukan ini? [Y/t] "
+read confirm
+if [ "${confirm}" == "" -o  "${confirm}" == "y" -o "${confirm}" == "Y" -o "${confirm}" == "yes" ]; then
+	echo "> Memasuki direktori $PWD"
+	cd $PWD
+	echo "> Mengunduh $FILENAME dengan wget"
+	wget -c --no-check-certificate -t 0 $WP -O $FILENAME
+	echo "> Mengekstrak $FILENAME"
+	if [ -e $FILENAME ]; then
+		tar -xvzf $FILENAME
 	fi
-elif [ "${hapus_berkas}" == "t" -o "${hapus_berkas}" =="T" ]; then
-	exit 1
+
+	echo "> Memindahkan berkas ke direktori saat ini ...."
+	if [ -d wordpress ]; then
+		mv -vf wordpress/* .
+	fi
+
+	echo "> Disarankan menghapus berkas $FILENAME untuk menghemat"
+	echo "> ruang disk. :-D "
+	echo ""
+	echo -n "> Apakah hendak menghapus berkas $FILENAME? [Y/t] "
+	read hapus_berkas
+	if [ "${hapus_berkas}" == "y" -o "${hapus_berkas}" == "Y" -o "${hapus_berkas}" == "" ]; then
+		echo "> Menghapus berkas $FILENAME sesuai permintaan!"
+		rm -rfv $FILENAME
+		echo "> Menghapus direktori wordpress ...!"
+		if [ -d wordpress ]; then
+			rm -rfv wordpress
+		fi
+	elif [ "${hapus_berkas}" == "t" -o "${hapus_berkas}" =="T" ]; then
+		exit 1
+	else
+		exit 1
+	fi
 else
 	exit 1
 fi
